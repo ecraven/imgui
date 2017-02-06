@@ -1367,6 +1367,8 @@ struct ImFont
     ImFontConfig*               ConfigData;         //              // Pointer within ContainerAtlas->ConfigData
     ImFontAtlas*                ContainerAtlas;     //              // What we has been loaded into
     float                       Ascent, Descent;    //              // Ascent: distance from top to bottom of e.g. 'A' [0..FontSize]
+    mutable bool                GlyphsMissing;
+    mutable ImVector<unsigned int>      MissingGlyphsVector;
 
     // Methods
     IMGUI_API ImFont();
@@ -1377,6 +1379,10 @@ struct ImFont
     IMGUI_API void              SetFallbackChar(ImWchar c);
     float                       GetCharAdvance(ImWchar c) const     { return ((int)c < IndexXAdvance.Size) ? IndexXAdvance[(int)c] : FallbackXAdvance; }
     bool                        IsLoaded() const                    { return ContainerAtlas != NULL; }
+    bool                        AreGlyphsMissing() const            { return GlyphsMissing; }
+    const ImVector<unsigned int> &MissingGlyphs() const             { return MissingGlyphsVector; }
+    void                        ResetMissingGlyphs()                { GlyphsMissing = false; MissingGlyphsVector.clear(); }
+
 
     // 'max_width' stops rendering after a certain width (could be turned into a 2d size). FLT_MAX to disable.
     // 'wrap_width' enable automatic word-wrapping across multiple lines to fit into given width. 0.0f to disable.

@@ -1788,6 +1788,16 @@ const ImFont::Glyph* ImFont::FindGlyph(unsigned short c) const
         if (i != (unsigned short)-1)
             return &Glyphs.Data[i];
     }
+    GlyphsMissing = true;
+    // check whether it is already registered as missing
+    for(unsigned int glyph : MissingGlyphsVector)
+    {
+        if(glyph == c)
+        {
+            return FallbackGlyph;
+        }
+    }
+    MissingGlyphsVector.push_back(c);
     return FallbackGlyph;
 }
 
